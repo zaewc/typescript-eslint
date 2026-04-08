@@ -1133,6 +1133,22 @@ isString(a);
       `,
       options: [{ checkTypePredicates: false }],
     },
+    {
+      // Technically, this has type 'falafel' and not string.
+      code: `
+declare function assertString(x: unknown): asserts x is string;
+assertString('falafel');
+      `,
+      options: [{ checkTypePredicates: true }],
+    },
+    {
+      // Technically, this has type 'falafel' and not string.
+      code: `
+declare function isString(x: unknown): x is string;
+isString('falafel');
+      `,
+      options: [{ checkTypePredicates: true }],
+    },
     `
 type A = { [name in Lowercase<string>]?: A };
 declare const a: A;
@@ -3487,54 +3503,6 @@ isString('fa' + 'lafel');
       errors: [
         {
           line: 4,
-          messageId: 'typeGuardAlreadyIsType',
-        },
-      ],
-      options: [{ checkTypePredicates: true }],
-    },
-    {
-      code: `
-interface Wider {
-  a: string;
-}
-interface Narrower {
-  a: string;
-  b?: number;
-}
-declare function isWider(x: unknown): x is Wider;
-declare const n: Narrower;
-if (isWider(n)) {
-}
-      `,
-      errors: [
-        {
-          line: 11,
-          messageId: 'typeGuardAlreadyIsType',
-        },
-      ],
-      options: [{ checkTypePredicates: true }],
-    },
-    {
-      code: `
-declare function assertString(x: unknown): asserts x is string;
-assertString('falafel');
-      `,
-      errors: [
-        {
-          line: 3,
-          messageId: 'typeGuardAlreadyIsType',
-        },
-      ],
-      options: [{ checkTypePredicates: true }],
-    },
-    {
-      code: `
-declare function isString(x: unknown): x is string;
-isString('falafel');
-      `,
-      errors: [
-        {
-          line: 3,
           messageId: 'typeGuardAlreadyIsType',
         },
       ],
