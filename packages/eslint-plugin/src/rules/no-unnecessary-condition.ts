@@ -593,7 +593,12 @@ export default createRule<Options, MessageId>({
             services,
             typeGuardAssertedArgument.argument,
           );
-          if (typeOfArgument === typeGuardAssertedArgument.type) {
+          if (
+            checker.isTypeAssignableTo(
+              typeOfArgument,
+              typeGuardAssertedArgument.type,
+            )
+          ) {
             context.report({
               node: typeGuardAssertedArgument.argument,
               messageId: 'typeGuardAlreadyIsType',
